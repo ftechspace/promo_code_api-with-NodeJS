@@ -10,6 +10,8 @@ const promoController = require('../controllers/promo')
 router.post('/', promoController.createPromo)
 router.get('/', promoController.getAllPromos)
 router.get('/active_promos', promoController.getAllActivePromos)
-router.get('/deactivate_promo/:promoId', promoController.deactivatePromo)
+router.put('/deactivate_promo/:promoId', promoController.deactivatePromo)
+router.post('/validate_promo', promoController.validatePromo)
+
 
 module.exports = router

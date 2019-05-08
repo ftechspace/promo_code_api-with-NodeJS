@@ -29,12 +29,14 @@ app.use(morgan('dev'))
 
 
 // // resouces directries
-const userRoutes = require('./api/routes/user');
+const userRoutes = require('./api/routes/user')
 const eventRoutes = require('./api/routes/event')
+const tripRoutes = require('./api/routes/trip')
 const promoRoutes = require('./api/routes/promo')
 
-app.use('/api/v1.0/user', userRoutes);
+app.use('/api/v1.0/user', userRoutes)
 app.use('/api/v1.0/event', eventRoutes)
+app.use('/api/v1.0/trip', tripRoutes)
 app.use('/api/v1.0/promo', promoRoutes)
 
 // error handling

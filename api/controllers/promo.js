@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+const gpl = require( 'google-polyline' )
 
 // MODELS
 const Promo = require('../models/promo');
@@ -85,7 +86,7 @@ exports.getAllPromos = (req, res, next) => {
 
 exports.deactivatePromo = (req, res, next) => {
     const promoId = req.params.promoId
-    Promo.update({
+    Promo.updateOne({
             _id: promoId
         }, {
             $set: {
@@ -101,6 +102,45 @@ exports.deactivatePromo = (req, res, next) => {
         .catch(err => {
             res.status(400).json({
                 error: "Could not deactivated the promo"
+            })
+        })
+}
+
+exports.validatePromo = (req, res, next) => {
+    const code = req.body.code
+    // const origin = req.body.origin
+    // const destinatin = req.body.destinatin
+
+    Promo.findOne({ code: code })
+        .populate('event')
+        .then(promo => {
+            if(promo == null){
+                return res.status(400).json({
+                    error: 'Promo code does not exist'
+                })
+            }
+
+            origin = { lat: '0.238982', lng: '-1.328927' }
+            destinatin = { lat: '0.238982', lng: '-1.328927' }
+
+            const polyline = gpl.encode([
+                [ origin.lat, origin.lng ],
+                [ destinatin.lat, destinatin.lng ]
+              ])
+              
+            return res.status(200).json({
+                validate_promo: {
+                    promo: promo,
+                    polyline: polyline,
+                    origin: origin,
+                    destinatin: destinatin
+                },
+
+            })
+        })
+        .catch(err => {
+            return res.status(400).json({
+                error: "Could not find promo code"
             })
         })
 }

@@ -16,7 +16,7 @@ const tripSchema = mongoose.Schema({
         ref: 'Location',
         required: true
     },
-    dropup_location: {
+    dropoff_location: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Location',
         required: true
