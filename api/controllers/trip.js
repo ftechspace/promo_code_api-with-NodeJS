@@ -13,14 +13,14 @@ exports.createTrip = (req, res, next) => {
     const pick_up = req.body.pickup_location
     const drop_off = req.body.dropoff_location
 
-    axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${pick_up}&key=AIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYw`)
+    axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${pick_up}&key=${process.env.API_KEY}`)
         .then(pick_up_result => {
             if (pick_up_result.data && pick_up_result.data.status == 'OK') {
 
                 const geometryPoints = pick_up_result.data.results[0].geometry.location
                 const pick_up_loc_lat = geometryPoints.lat
                 const pick_up_loc_lng = geometryPoints.lng
-                console.log(geometryPoints)
+
                 // trip origin
                 const tripPickUpLocation = new Location({
                     _id: new mongoose.Types.ObjectId,
@@ -30,7 +30,7 @@ exports.createTrip = (req, res, next) => {
                 })
                 tripPickUpLocation.save()
 
-                axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${drop_off}&key=AIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYw`)
+                axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${drop_off}&key=${process.env.API_KEY}`)
                     .then(drop_off_result => {
                         if (drop_off_result.data && drop_off_result.data.status == 'OK') {
 

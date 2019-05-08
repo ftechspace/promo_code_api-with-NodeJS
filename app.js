@@ -17,7 +17,7 @@ app.use('/uploads', express.static('uploads'));
 // connecting to mongoDB
 const mongoose = require('mongoose')
 mongoose.connect(
-    'mongodb+srv://fortunecode:fortunecode@safeboda-e9haz.mongodb.net/test?retryWrites=true', 
+    `mongodb+srv://fortunecode:${process.env.MONGO_ATLAS_PW}@safeboda-e9haz.mongodb.net/test?retryWrites=true`, 
     { useNewUrlParser: true }
 );
 mongoose.Promise = global.Promise

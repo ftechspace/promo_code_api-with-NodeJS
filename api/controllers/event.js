@@ -14,7 +14,7 @@ exports.createEvent = (req, res, next) => {
     const name = req.body.name
     const location = req.body.location
 
-    axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYw`)
+    axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.API_KEY}`)
         .then(result => {
             if (result.data && result.data.status == 'OK') {
 

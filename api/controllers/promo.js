@@ -114,9 +114,16 @@ exports.validatePromo = (req, res, next) => {
     Promo.findOne({ code: code })
         .populate('event')
         .then(promo => {
+            // check if code exist
             if(promo == null){
                 return res.status(400).json({
                     error: 'Promo code does not exist'
+                })
+            }
+            // check if code has expired
+            if(promo.expiry_date < moment().format('YYYY-MM-DD')) {
+                return res.status(400).json({
+                    error: 'Promo code has expired'
                 })
             }
 
