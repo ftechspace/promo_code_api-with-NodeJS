@@ -1,5 +1,7 @@
 const axios = require('axios')
 
+const PromoController = require('../controllers/promo')
+
 exports.uniqCode = () => {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -10,7 +12,17 @@ exports.uniqCode = () => {
     return result;
 }
 
-exports.getDistanceAndCost = (origin, destination) => {
+exports.getCost = (trip_distance) => {
+    // calculate cost 
+    const price_per_km = 2.00
+    const time_to_distination = trip_distance * price_per_km
+    const price_per_min = 1.00
+    const cost = trip_distance * price_per_km + time_to_distination * price_per_min + 5.00
+    return cost
+}
+
+
+exports.getDistance = (origin, destination) => {
     // Converts numeric degrees to radians 
     if (typeof (Number.prototype.toRad) === "undefined") {
         Number.prototype.toRad = function () {
@@ -35,30 +47,17 @@ exports.getDistanceAndCost = (origin, destination) => {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = earthRadius * c;
     const trip_distance = Math.round(d * Math.pow(10, decimals)) / Math.pow(10, decimals); //distance in kilometers. 
-    console.log(trip_distance)
-
-    // calculate cost then return distance and cost
-    const price_per_km = 0.5
-    const time_to_distination = trip_distance * price_per_km
-    const price_per_min = 0.2
-
-    const cost = trip_distance * price_per_km + time_to_distination * price_per_min + 5
-
-    if(trip_distance <= 5.00){
-        returnObj = {
-            cost: '5.00',
-            distance: trip_distance
-        }
-       return returnObj
-    }else{
-        returnObj = {
-            cost: cost,
-            distance: trip_distance
-        }
-       return returnObj
-    }
-
+    return trip_distance
 }
+
+exports.validatePromoWithRadius = async (trip_point, promo_code) => {
+    // calculate cost 
+    const _promo = await PromoController.getOnePromo(promo_code)
+    const distance = this.getDistance(trip_point, _promo.event.location)
+    return {distance,_promo}
+
+}  
+
 
 // exports.getLocationPointCodinate = async (location) => {
 //     // console.log(location)

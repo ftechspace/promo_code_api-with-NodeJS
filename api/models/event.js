@@ -11,6 +11,10 @@ const eventSchema = mongoose.Schema({
         ref: 'Location',
         required: true
     },
+    radius: {
+        type: String,
+        required: true
+    },
     created: {
         type: String,
         required: true

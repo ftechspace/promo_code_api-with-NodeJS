@@ -12,7 +12,7 @@ exports.createPromo = (req, res, next) => {
     const eventId = req.body.event_id
     const amount = req.body.amount
     const expiry_date = req.body.expiry_date
-
+ 
     // create promo code
     const promo = new Promo({
         _id: new mongoose.Types.ObjectId,
@@ -25,7 +25,7 @@ exports.createPromo = (req, res, next) => {
     })
     promo.save()
         .then(promo => {
-            res.status(201).json({
+            return res.status(201).json({
                 promo: {
                     id: promo._id,
                     code: promo.code,
@@ -38,7 +38,7 @@ exports.createPromo = (req, res, next) => {
             })
         })
         .catch(err => {
-            res.status(500).json({
+            return res.status(500).json({
                 error: err
             })
         })
@@ -71,8 +71,8 @@ exports.getAllActivePromos = (req, res, next) => {
         })
 }
 
-exports.getAllPromos = (req, res, next) => {
-    Promo.find()
+exports.getAllPromos = async (req, res, next) => {
+    const promos = await Promo.find()
         .sort({
             created: "desc"
         })
@@ -83,16 +83,32 @@ exports.getAllPromos = (req, res, next) => {
                 path: 'location',
             }
         })
-        .then(promos => {
-            res.status(200).json({
-                count: promos.length,
-                promos: promos
-            })
-        })
-        .catch(err => {
-            res.status(400).json({
-                error: err
-            })
+        console.log(promos)
+        res.status(200).json({
+                    count: promos.length,
+                    promos: promos
+                })
+        // .then(promos => {
+        //     res.status(200).json({
+        //         count: promos.length,
+        //         promos: promos
+        //     })
+        // })
+        // .catch(err => {
+        //     res.status(400).json({
+        //         error: err
+        //     })
+        // })
+}
+
+exports.getOnePromo = (code) => {
+    return Promo.findOne({code: code})
+        .populate('event')
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'location',
+            }
         })
 }
 

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
+    "test": "jest ",
     "heroku-postbuild": "npm run build"
   },
   "engines": {
@@ -18,12 +18,15 @@
     "axios": "^0.18.0",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
-    "cloudinary": "^1.13.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.4",
     "debug": "^4.1.0",
     "express": "^4.16.4",
     "google-polyline": "^1.0.3",
+    "jest": "^24.8.0",
     "jsonwebtoken": "^8.3.0",
+    "mocha": "^6.1.4",
     "moment": "^2.22.2",
     "mongoose": "^5.3.11",
     "morgan": "^1.9.1",

@@ -11,7 +11,10 @@ const User = require('../models/user');
 exports.userSignUp = (req, res, next) => {
     const userEmail = req.body.email
     const userPassword = req.body.password
-    User.find({ email: userEmail })
+    
+    User.find({
+            email: userEmail
+        })
         .then(email => {
             if (email.length >= 1) {
                 return res.status(409).json({
@@ -42,7 +45,7 @@ exports.userSignUp = (req, res, next) => {
                                 res.status(201).json({
                                     profile: {
                                         id: result._id,
-                                        email: result.email, 
+                                        email: result.email,
                                         token: token,
                                         created: result.created
                                     }
