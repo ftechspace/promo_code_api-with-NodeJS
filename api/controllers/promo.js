@@ -52,6 +52,12 @@ exports.getAllActivePromos = (req, res, next) => {
             created: "desc"
         })
         .populate('event')
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'location',
+            }
+        })
         .then(promos => {
             res.status(200).json({
                 count: promos.length,
@@ -71,6 +77,12 @@ exports.getAllPromos = (req, res, next) => {
             created: "desc"
         })
         .populate('event')
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'location',
+            }
+        })
         .then(promos => {
             res.status(200).json({
                 count: promos.length,

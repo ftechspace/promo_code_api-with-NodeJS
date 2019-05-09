@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const axios = require('axios')
+
+const Utils = require('../partials/utils')
 // MODELS
 const Trip = require('../models/trip');
 const Location = require('../models/location')
@@ -29,12 +31,13 @@ exports.createTrip = (req, res, next) => {
                     created: moment().format('YYYY-MM-DD '),
                 })
                 tripPickUpLocation.save()
+      
 
                 axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${drop_off}&key=${process.env.API_KEY}`)
                     .then(drop_off_result => {
                         if (drop_off_result.data && drop_off_result.data.status == 'OK') {
 
-                            const geometryPoints = pick_up_result.data.results[0].geometry.location
+                            const geometryPoints = drop_off_result.data.results[0].geometry.location
                             const drop_off_loc_lat = geometryPoints.lat
                             const drop_off_loc_lng = geometryPoints.lng
 
@@ -46,14 +49,15 @@ exports.createTrip = (req, res, next) => {
                                 created: moment().format('YYYY-MM-DD '),
                             })
                             tripDropOffLocation.save()
-
-                            
-                            const cost = '95'
-
+                       
+                            // trip distance and cost
+                            const trip_distance_and_cost = Utils.getDistanceAndCost(tripPickUpLocation, tripDropOffLocation)
+                        
                             const trip = new Trip({
                                 _id: new mongoose.Types.ObjectId,
                                 author: userId,
-                                cost: cost,
+                                cost: trip_distance_and_cost.cost,
+                                distance: trip_distance_and_cost.distance,
                                 pickup_location: tripPickUpLocation._id,
                                 dropoff_location: tripDropOffLocation._id,
                                 created: moment().format('YYYY-MM-DD '),

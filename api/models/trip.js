@@ -11,6 +11,10 @@ const tripSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    distance: {
+        type: String,
+        required: true
+    },
     pickup_location: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Location',
