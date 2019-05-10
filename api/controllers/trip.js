@@ -57,10 +57,10 @@ exports.createTrip = async (req, res, next) => {
             const  origin_distance_from_event = await Utils.validatePromoWithRadius(tripPickUpLocation, promo_code)
             const  destination_distance_from_event = await Utils.validatePromoWithRadius(tripDropOffLocation, promo_code)
 
-            if(parseFloat(destination_distance_from_event.distance) <= parseFloat(destination_distance_from_event._promo.event.radius)){
+            if(parseFloat(destination_distance_from_event.distance) <= parseFloat(destination_distance_from_event._promo.radius)){
                 trip_cost = trip_cost - destination_distance_from_event._promo.amount
                 console.log('destination')
-            } else if (parseFloat(origin_distance_from_event.distance) <= parseFloat(origin_distance_from_event._promo.event.radius)){
+            } else if (parseFloat(origin_distance_from_event.distance) <= parseFloat(origin_distance_from_event._promo.radius)){
                 trip_cost = trip_cost - origin_distance_from_event._promo.amount
                 console.log('origin')
             }

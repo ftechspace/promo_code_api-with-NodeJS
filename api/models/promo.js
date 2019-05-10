@@ -15,6 +15,10 @@ const promoSchema = mongoose.Schema({
         ref: 'Event',
         required: true
     },
+    radius: {
+        type: String,
+        required: true
+    },
     active: {
         type: Boolean,
         require: true

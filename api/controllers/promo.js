@@ -12,6 +12,7 @@ exports.createPromo = (req, res, next) => {
     const eventId = req.body.event_id
     const amount = req.body.amount
     const expiry_date = req.body.expiry_date
+    const event_radius = req.body.event_radius
  
     // create promo code
     const promo = new Promo({
@@ -19,6 +20,7 @@ exports.createPromo = (req, res, next) => {
         event: eventId,
         code: Utils.uniqCode(),
         amount: amount,
+        radius: event_radius,
         active: true,
         expiry_date: expiry_date,
         created: moment().format('YYYY-MM-DD '),
@@ -31,6 +33,7 @@ exports.createPromo = (req, res, next) => {
                     code: promo.code,
                     amount: promo.amount,
                     event: promo.event,
+                    radius: promo.radius,
                     active: promo.active,
                     expiry_date: promo.expiry_date,
                     created: promo.created
@@ -84,7 +87,7 @@ exports.getAllPromos = async (req, res, next) => {
             }
         })
         console.log(promos)
-        res.status(200).json({
+        return res.status(200).json({
                     count: promos.length,
                     promos: promos
                 })
@@ -130,6 +133,29 @@ exports.deactivatePromo = (req, res, next) => {
         .catch(err => {
             res.status(400).json({
                 error: "Could not deactivated the promo"
+            })
+        })
+}
+
+exports.changePromoRadius = (req, res, next) => {
+    const promoId = req.params.promoId
+    const radius = req.body.radius
+    Promo.updateOne({
+            _id: promoId
+        }, {
+            $set: {
+                radius: radius
+            }
+        })
+        .populate('event')
+        .then(promo => {
+            res.status(200).json({
+                message: "promo radius has been updated"
+            })
+        })
+        .catch(err => {
+            res.status(400).json({
+                error: "Could not update promo radius"
             })
         })
 }
