@@ -47,6 +47,35 @@ exports.createPromo = (req, res, next) => {
         })
 }
 
+exports.getAllPromos = async (req, res, next) => {
+    const promos = await Promo.find()
+        .sort({
+            created: "desc"
+        })
+        .populate('event')
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'location',
+            }
+        })
+        return res.status(200).json({
+                    count: promos.length,
+                    promos: promos
+                })
+        // .then(promos => {
+        //     res.status(200).json({
+        //         count: promos.length,
+        //         promos: promos
+        //     })
+        // })
+        // .catch(err => {
+        //     res.status(400).json({
+        //         error: err
+        //     })
+        // })
+}
+
 exports.getAllActivePromos = (req, res, next) => {
     Promo.find({
             active: true
@@ -72,36 +101,6 @@ exports.getAllActivePromos = (req, res, next) => {
                 error: err
             })
         })
-}
-
-exports.getAllPromos = async (req, res, next) => {
-    const promos = await Promo.find()
-        .sort({
-            created: "desc"
-        })
-        .populate('event')
-        .populate({
-            path: 'event',
-            populate: {
-                path: 'location',
-            }
-        })
-        console.log(promos)
-        return res.status(200).json({
-                    count: promos.length,
-                    promos: promos
-                })
-        // .then(promos => {
-        //     res.status(200).json({
-        //         count: promos.length,
-        //         promos: promos
-        //     })
-        // })
-        // .catch(err => {
-        //     res.status(400).json({
-        //         error: err
-        //     })
-        // })
 }
 
 exports.getOnePromo = (code) => {
