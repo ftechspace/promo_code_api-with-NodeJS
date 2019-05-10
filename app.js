@@ -3,16 +3,13 @@ const app = express();
 const cors = require('cors')
 
 app.use(cors())
+
 // body-parser
-// npm install --save body-parser
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-
-// making uploads folder public
-app.use('/uploads', express.static('uploads'));
 
 // connecting to mongoDB
 const mongoose = require('mongoose')
@@ -22,11 +19,7 @@ mongoose.connect(
 );
 mongoose.Promise = global.Promise
 
-// var mongoose = require('mongoose');
-// console.log("connect to db", mongoose.connection.readyState);
-
 // log Request
-// npm install --save morgan
 const morgan = require('morgan')
 app.use(morgan('dev'))
 
@@ -37,18 +30,20 @@ const eventRoutes = require('./api/routes/event')
 const tripRoutes = require('./api/routes/trip')
 const promoRoutes = require('./api/routes/promo')
 
+// base endpoints
 app.use('/api/v1.0/user', userRoutes)
 app.use('/api/v1.0/event', eventRoutes)
 app.use('/api/v1.0/trip', tripRoutes)
 app.use('/api/v1.0/promo', promoRoutes)
 
-// error handling
+// error handling for 404
 app.use((req, res, next) => {
     const error = new Error('Not found');
     error.status = 404;
     next(error)
 })
 
+// error handling for server
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({

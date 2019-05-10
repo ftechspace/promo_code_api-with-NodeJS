@@ -186,7 +186,7 @@ exports.validatePromo = async (req, res, next) => {
     
     const originPoint = await Utils.getLocationPointCodinate(origin)
     const destinationPoint = await Utils.getLocationPointCodinate(destination)
-    console.log(originPoint, destinationPoint)
+    console.log('validate code', originPoint, destinationPoint)
     const polyline = gpl.encode([
         [originPoint.results[0].geometry.location.lat, originPoint.results[0].geometry.location.lng],
         [destinationPoint.results[0].geometry.location.lat, destinationPoint.results[0].geometry.location.lng]

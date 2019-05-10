@@ -8,7 +8,6 @@ const routeDir = require('../app')
 chai.use(chaiHttp);
 chai.should();
 
-mongoose.Promise = global.Promise
 
 describe("All Operations on Event Promo", () => {
 
@@ -87,17 +86,17 @@ describe("All Operations on Event Promo", () => {
     });
 
     // Test to validate promo code
-    // it("should est the validity of the promo code", (done) => {
-    //     chai.request(routeDir)
-    //         .post('/api/v1.0/promo/validate_promo')
-    //         .send({
-    //             "code": "TXWKhi",
-    //             "origin": "Madina Zongo, Madina",
-    //             "destination": "University of Ghana, Legon, Legon Boundary, Accra"
-    //         })
-    //         .end((err, res) => {
-    //             expect(res).to.have.status(200)
-    //             done()
-    //         });
-    // });
+    it("should est the validity of the promo code", (done) => {
+        chai.request(routeDir)
+            .post('/api/v1.0/promo/validate_promo')
+            .send({
+                "code": "TXWKhi",
+                "origin": "Madina Zongo, Madina",
+                "destination": "University of Ghana, Legon, Legon Boundary, Accra"
+            })
+            .end((err, res) => {
+                expect(res).to.have.status(200)
+                done()
+            });
+    });
 });
