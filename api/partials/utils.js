@@ -53,26 +53,19 @@ exports.getDistance = (origin, destination) => {
 exports.validatePromoWithRadius = async (trip_point, promo_code) => {
     // calculate cost 
     const _promo = await PromoController.getOnePromo(promo_code)
+    console.log('validate', _promo)
     const distance = this.getDistance(trip_point, _promo.event.location)
     return {distance,_promo}
 
 }  
 
 
-// exports.getLocationPointCodinate = async (location) => {
-//     // console.log(location)
-//     try {
-//         const response = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYw`)
-//         return response.data
-//     } catch (error) {
-//         console.log('error', error)
-//     }
-
-//     // .then(result => {
-//     //     // console.log(result.data.results[0].geometry.location)
-//     //     return result.data.results[0].geometry.location
-//     // })
-//     // .catch(err => {
-//     //     return err
-//     // })
-// }
+exports.getLocationPointCodinate = async (location) => {
+    try {
+        const {data} = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.API_KEY}`)
+        console.log('location that comes', data)
+        return data
+    } catch (error) {
+        console.log('Error from googleapis', error)
+    }
+}

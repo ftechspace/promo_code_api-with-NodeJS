@@ -15,13 +15,9 @@ exports.createEvent = async (req, res, next) => {
     const location = req.body.location
     const event_radius = req.body.event_radius
 
-
-    const {
-        data
-    } = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.API_KEY}`)
-
+    const data = await Utils.getLocationPointCodinate(location)
+  
     if (data && data.status == 'OK') {
-
         const geometryPoints = data.results[0].geometry.location
         const loc_lat = geometryPoints.lat
         const loc_lng = geometryPoints.lng

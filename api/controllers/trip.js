@@ -16,9 +16,9 @@ exports.createTrip = async (req, res, next) => {
     const promo_code = req.body.promo_code
     const drop_off = req.body.dropoff_location
 
-    const {data: pick_up_result} = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${pick_up}&key=${process.env.API_KEY}`)
-    const {data: drop_off_result} = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${drop_off}&key=${process.env.API_KEY}`)
-
+    const pick_up_result = await Utils.getLocationPointCodinate(pick_up)
+    const drop_off_result = await Utils.getLocationPointCodinate(drop_off)
+    console.log('create trip', drop_off_result, pick_up_result)
     if (pick_up_result.status == 'OK' && drop_off_result.status == 'OK') {
 
          // trip origin
@@ -54,6 +54,7 @@ exports.createTrip = async (req, res, next) => {
         console.log(`>>>>>>>> Main cost GHS ${trip_cost} >>>>>>>>>`)
         // check to apply promo
         if (promo_code) {
+            console.log('code check',tripDropOffLocation, tripPickUpLocation, promo_code)
             const  origin_distance_from_event = await Utils.validatePromoWithRadius(tripPickUpLocation, promo_code)
             const  destination_distance_from_event = await Utils.validatePromoWithRadius(tripDropOffLocation, promo_code)
 
