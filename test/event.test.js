@@ -13,7 +13,7 @@ describe("All Operations on Event", () => {
 
     beforeAll(async () => {
         mongoose.Promise = global.Promise
-        console.log(">>>>>>>>>>before all>>>>>>>>>>>")
+        console.log(">>>>>>>>>> beforeAll Event >>>>>>>>>>>")
         await mongoose.connect(
             `mongodb+srv://fortunecode:fortunecode@safeboda-e9haz.mongodb.net/test?retryWrites=true`, {
                 useNewUrlParser: true
@@ -23,7 +23,7 @@ describe("All Operations on Event", () => {
 
     afterAll(async () => {
         mongoose.Promise = global.Promise
-        console.log(">>>>>>>>>>after all>>>>>>>>>>>")
+        console.log(">>>>>>>>>> afterAll Even >>>>>>>>>>>")
         await mongoose.connection.close();
     });
 
@@ -34,7 +34,8 @@ describe("All Operations on Event", () => {
             .send({
                 "name": "Monthly GoLang Summit",
 	            "location": "meltwater incubator"
-            }).end((err, res) => {
+            })
+            .end((err, res) => {
                 expect(res).to.have.status(201).to.be.a('object')
                 done()
             });

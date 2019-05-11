@@ -13,7 +13,7 @@ describe("All Operations on Event Promo", () => {
 
     beforeAll(async () => {
         mongoose.Promise = global.Promise
-        console.log(">>>>>>>>>>before all>>>>>>>>>>>")
+        console.log(">>>>>>>>>>beforeAll Promo>>>>>>>>>>>")
         await mongoose.connect(
             `mongodb+srv://fortunecode:fortunecode@safeboda-e9haz.mongodb.net/test?retryWrites=true`, {
                 useNewUrlParser: true
@@ -23,12 +23,12 @@ describe("All Operations on Event Promo", () => {
 
     afterAll(async () => {
         mongoose.Promise = global.Promise
-        console.log(">>>>>>>>>>after all>>>>>>>>>>>")
+        console.log(">>>>>>>>>>afterAll Promo>>>>>>>>>>>")
         await mongoose.connection.close();
     });
 
-    // Test to create promo
-    it("should create promo ", (done) => {
+    // Test to create promo succesfully
+    it("should create promo succesfully", (done) => {
         chai.request(routeDir)
             .post('/api/v1.0/promo/')
             .send({
@@ -41,6 +41,21 @@ describe("All Operations on Event Promo", () => {
                 done()
             });
     });
+    
+    // // Test to fail promo creation 
+    // it("should fail promo creation ", (done) => {
+    //     chai.request(routeDir)
+    //         .post('/api/v1.0/promo/')
+    //         .send({
+    //             "event_id": "5cd545222260ff5a58113258wrong",
+    //             "amount": "2.00",
+    //             // "event_radius": "14", no radius
+    //             "expiry_date": "2019-05-30"
+    //         }).end((err, res) => {
+    //             expect(res).to.have.status(400).to.be.a('string')
+    //             done()
+    //         });
+    // });
 
     // Test to get all promos
     it("should get all promos ", (done) => {
@@ -86,7 +101,7 @@ describe("All Operations on Event Promo", () => {
     });
 
     // Test to validate promo code
-    it("should est the validity of the promo code", (done) => {
+    it("should test the validity of the promo code", (done) => {
         chai.request(routeDir)
             .post('/api/v1.0/promo/validate_promo')
             .send({
