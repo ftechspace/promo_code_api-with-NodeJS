@@ -12,7 +12,6 @@ exports.createEvent = async (req, res, next) => {
     const event_radius = req.body.event_radius
     
     const data = await Utils.getLocationPointCodinate(location)
-    console.log('waiting on  data', data.status)
     if (data.status == 'OK') {
         const geometryPoints = data.results[0].geometry.location
         const loc_lat = geometryPoints.lat

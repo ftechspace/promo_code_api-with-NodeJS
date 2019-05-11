@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 chai.should();
 
 
-describe("All Operations on Event", () => {
+describe("All Operations on Trip", () => {
 
     beforeAll(async () => {
         mongoose.Promise = global.Promise
@@ -25,15 +25,17 @@ describe("All Operations on Event", () => {
         await mongoose.connection.close();
     });
 
-    // Test to create event
-    it("should create event ", async (done) => {
+    // Test to create Trip
+    it("should create trip ", async (done) => {
         const res = await chai.request(routeDir)
-            .post('/api/v1.0/event/')
+            .post('/api/v1.0/trip/')
             .send({
-                "name": "Monthly GoLang Summit",
-	            "location": "meltwater incubator"
+                "userId": "5cd525c07a04281d62d2f65b",
+                "pickup_location": "James Town Lighthouse, Cleland Road, Accra",
+                "dropoff_location": "meltwater incubator",
+                "promo_code": "TXWKhi"
             })
-            expect(res).to.have.status(201).to.be.a('object')
-            done()
+        expect(res).to.have.status(201).to.be.a('object')
+        done()
     });
 });

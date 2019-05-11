@@ -54,7 +54,6 @@ exports.getDistance = (origin, destination) => {
 exports.validatePromoWithRadius = async (trip_point, promo_code) => {
     // calculate cost
     const _promo = await PromoController.getOnePromo(promo_code)
-    console.log('validate', _promo)
     const distance = this.getDistance(trip_point, _promo.event.location)
     return {distance,_promo}
 
@@ -69,6 +68,6 @@ exports.getLocationPointCodinate = async (location) => {
             return data
         }
     } catch (error) {
-        console.log('Error from googleapis', error)
+        return error
     }
 }

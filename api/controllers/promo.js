@@ -7,21 +7,23 @@ const Event = require('../models/event')
 // PARTIALS
 const Utils = require('../partials/utils')
 // CONTROLLERS
+
 exports.createPromo = async (req, res, next) => {
     const eventId = req.body.event_id
     const amount = req.body.amount
     const expiry_date = req.body.expiry_date
     const event_radius = req.body.event_radius
+
     // check if event exist
     const event = await Event.findOne({
         _id: eventId
     })
-    if (event == null) return res.status(400).json({
+    if (event == null) return event.status(400).json({
         message: 'event id does not exist'
     })
 
     // create promo code
-    const promo = new Promo({
+    const promo = await new Promo({
         _id: new mongoose.Types.ObjectId,
         event: eventId,
         code: Utils.uniqCode(),
@@ -30,38 +32,35 @@ exports.createPromo = async (req, res, next) => {
         active: true,
         expiry_date: expiry_date,
         created: moment().format('YYYY-MM-DD '),
+    }).save()
+    if (promo._id) {
+        return res.status(201).json({
+            promo: {
+                id: promo._id,
+                code: promo.code,
+                amount: promo.amount,
+                event: promo.event,
+                radius: promo.radius,
+                active: promo.active,
+                expiry_date: promo.expiry_date,
+                created: promo.created
+            }
+        })
+    }
+    return res.status(400).json({
+        error: promo
     })
-    promo.save()
-        .then(promo => {
-            return res.status(201).json({
-                promo: {
-                    id: promo._id,
-                    code: promo.code,
-                    amount: promo.amount,
-                    event: promo.event,
-                    radius: promo.radius,
-                    active: promo.active,
-                    expiry_date: promo.expiry_date,
-                    created: promo.created
-                }
-            })
-        })
-        .catch(err => {
-            return res.status(400).json({
-                error: err
-            })
-        })
 }
 
 exports.getAllPromos = async (req, res, next) => {
     const promos = await Promo.find()
-    .populate('event')
-    .populate({
-        path: 'event',
-        populate: {
-            path: 'location'
-        }
-    })
+        .populate('event')
+        .populate({
+            path: 'event',
+            populate: {
+                path: 'location'
+            }
+        })
     return res.status(200).json({
         count: promos.length,
         promos: promos
@@ -79,15 +78,15 @@ exports.getAllActivePromos = async (req, res, next) => {
                 path: 'location',
             }
         })
-        return res.status(200).json({
-            count: active_promos.length,
-            promos: active_promos
-        })
+    return res.status(200).json({
+        count: active_promos.length,
+        promos: active_promos
+    })
 }
 
-exports.deactivatePromo = (req, res, next) => {
+exports.deactivatePromo = async (req, res, next) => {
     const promoId = req.params.promoId
-    Promo.updateOne({
+    const promo = await Promo.updateOne({
             _id: promoId
         }, {
             $set: {
@@ -95,22 +94,20 @@ exports.deactivatePromo = (req, res, next) => {
             }
         })
         .populate('event')
-        .then(promo => {
-            res.status(200).json({
-                message: "promo has been deactivated"
-            })
+    if (promo.ok == 1) {
+        return res.status(200).json({
+            message: "promo has been deactivated"
         })
-        .catch(err => {
-            res.status(400).json({
-                error: "Could not deactivated the promo"
-            })
-        })
+    }
+    return res.status(400).json({
+        error: "Could not deactivated the promo"
+    })
 }
 
-exports.changePromoRadius = (req, res, next) => {
+exports.changePromoRadius = async (req, res, next) => {
     const promoId = req.params.promoId
     const radius = req.body.radius
-    Promo.updateOne({
+    const promo = await Promo.updateOne({
             _id: promoId
         }, {
             $set: {
@@ -118,16 +115,14 @@ exports.changePromoRadius = (req, res, next) => {
             }
         })
         .populate('event')
-        .then(promo => {
-            res.status(200).json({
-                message: "promo radius has been updated"
-            })
+    if (promo.ok == 1) {
+        return res.status(200).json({
+            message: "promo radius has been updated"
         })
-        .catch(err => {
-            res.status(400).json({
-                error: "Could not update promo radius"
-            })
-        })
+    }
+    return res.status(400).json({
+        error: "Could not update promo radius"
+    })
 }
 
 exports.validatePromo = async (req, res, next) => {

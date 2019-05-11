@@ -18,35 +18,31 @@ exports.createTrip = async (req, res, next) => {
 
     const pick_up_result = await Utils.getLocationPointCodinate(pick_up)
     const drop_off_result = await Utils.getLocationPointCodinate(drop_off)
-    console.log('create trip', drop_off_result, pick_up_result)
     if (pick_up_result.status == 'OK' && drop_off_result.status == 'OK') {
 
-         // trip origin
+        // trip origin
         const pickUpGeometryPoints = pick_up_result.results[0].geometry.location
         const pick_up_loc_lat = pickUpGeometryPoints.lat
         const pick_up_loc_lng = pickUpGeometryPoints.lng
 
-        const tripPickUpLocation = new Location({
+        const tripPickUpLocation = await new Location({
             _id: new mongoose.Types.ObjectId,
             latitude: pick_up_loc_lat,
             longitude: pick_up_loc_lng,
             created: moment().format('YYYY-MM-DD '),
-        })
-        tripPickUpLocation.save()
+        }).save()
 
         // trip destination
         const dropOffGeometryPoints = drop_off_result.results[0].geometry.location
         const drop_off_loc_lat = dropOffGeometryPoints.lat
         const drop_off_loc_lng = dropOffGeometryPoints.lng
 
-        const tripDropOffLocation = new Location({
+        const tripDropOffLocation = await new Location({
             _id: new mongoose.Types.ObjectId,
             latitude: drop_off_loc_lat,
             longitude: drop_off_loc_lng,
             created: moment().format('YYYY-MM-DD '),
-        })
-        tripDropOffLocation.save()
-
+        }).save()
 
         // trip distance and cost
         const trip_distance = Utils.getDistance(tripPickUpLocation, tripDropOffLocation)
@@ -54,20 +50,17 @@ exports.createTrip = async (req, res, next) => {
         console.log(`>>>>>>>> Main cost GHS ${trip_cost} >>>>>>>>>`)
         // check to apply promo
         if (promo_code) {
-            console.log('code check',tripDropOffLocation, tripPickUpLocation, promo_code)
-            const  origin_distance_from_event = await Utils.validatePromoWithRadius(tripPickUpLocation, promo_code)
-            const  destination_distance_from_event = await Utils.validatePromoWithRadius(tripDropOffLocation, promo_code)
+            const origin_distance_from_event = await Utils.validatePromoWithRadius(tripPickUpLocation, promo_code)
+            const destination_distance_from_event = await Utils.validatePromoWithRadius(tripDropOffLocation, promo_code)
 
-            if(parseFloat(destination_distance_from_event.distance) <= parseFloat(destination_distance_from_event._promo.radius)){
+            if (parseFloat(destination_distance_from_event.distance) <= parseFloat(destination_distance_from_event._promo.radius)) {
                 trip_cost = trip_cost - destination_distance_from_event._promo.amount
-                console.log('destination')
-            } else if (parseFloat(origin_distance_from_event.distance) <= parseFloat(origin_distance_from_event._promo.radius)){
+            } else if (parseFloat(origin_distance_from_event.distance) <= parseFloat(origin_distance_from_event._promo.radius)) {
                 trip_cost = trip_cost - origin_distance_from_event._promo.amount
-                console.log('origin')
             }
         }
         console.log(`>>>>>>>> After Promo is applied  GHS ${trip_cost} >>>>>>>>>`)
-        const trip = new Trip({
+        const trip = await new Trip({
             _id: new mongoose.Types.ObjectId,
             author: userId,
             cost: trip_cost,
@@ -75,18 +68,19 @@ exports.createTrip = async (req, res, next) => {
             pickup_location: tripPickUpLocation._id,
             dropoff_location: tripDropOffLocation._id,
             created: moment().format('YYYY-MM-DD '),
+        }).save()
+
+        if (trip._id) {
+            return res.status(201).json({
+                result: trip,
+                message: "Trip created"
+            })
+        }
+        return res.status(400).json({
+            message: "could not  create tirp"
         })
-        trip.save()
-            .then(trip => {
-                res.status(201).json({
-                    result: trip,
-                    message: "Trip created"
-                })
-            })
-            .catch(err => {
-                res.status(400).json({
-                    error: err
-                })
-            })
     }
+    return res.status(400).json({
+        message: "could not  create tirp"
+    })
 }

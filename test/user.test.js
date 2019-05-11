@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 chai.should();
 
 
-describe("All Operations on Event", () => {
+describe("All Operations on User", () => {
 
     beforeAll(async () => {
         mongoose.Promise = global.Promise
@@ -25,15 +25,15 @@ describe("All Operations on Event", () => {
         await mongoose.connection.close();
     });
 
-    // Test to create event
-    it("should create event ", async (done) => {
+    // Test to create user
+    it("should create user ", async (done) => {
         const res = await chai.request(routeDir)
-            .post('/api/v1.0/event/')
+            .post('/api/v1.0/user/')
             .send({
-                "name": "Monthly GoLang Summit",
-	            "location": "meltwater incubator"
+                "email": "ceosfgfdde@gmail.com",
+                "password": "codecode"
             })
-            expect(res).to.have.status(201).to.be.a('object')
-            done()
+        expect(res).to.have.status(201).to.be.a('object')
+        done()
     });
 });
