@@ -35,7 +35,7 @@ describe("All Operations on Trip", () => {
                 "dropoff_location": "meltwater incubator",
                 "promo_code": "EEQpiu"
             })
-            .set('Authorization', 'Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvZHNkZmZkYXNkZUBnbWFpbC5jb20iLCJ1c2VySWQiOiI1Y2Q4YWU2N2JlZGEwMjJiMzdiMTUxMjUiLCJpYXQiOjE1NTc3MDQyOTUsImV4cCI6MTU1NzcxNTA5NX0.Szgu2MKofJzq41BBZ-9niE_KwtTkOBkuXSjbsL5HOp8')
+            .set('Authorization', 'Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhdGNoQGdtYWlsLmNvbSIsInVzZXJJZCI6IjVjZDkyYzY3MWExMGIzMDAxNjQxMjE5YiIsImlhdCI6MTU1NzczNjU1MSwiZXhwIjoxNTU3NzQ3MzUxfQ.ILqwpGfKhfp4ivUe7iCPRER5tCUOxvA7dINfi3zURF0')
         expect(res).to.have.status(201).to.be.a('object')
         done()
     });
