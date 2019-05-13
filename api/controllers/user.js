@@ -12,14 +12,17 @@ exports.userSignUp = async (req, res, next) => {
     const userEmail = req.body.email
     const userPassword = req.body.password
 
+    console.log('came in')
     const _user = await User.find({
         email: userEmail
     })
+    console.log('did you find your?', _user)
     if (_user.length >= 1) {
         return res.status(409).json({
             message: 'Email already exist'
         })
     }
+    console.log('did not find user so create')
     bcrypt.hash(userPassword, 10, async (err, hash) => {
         if (err) {
             return res.status(500).json({
@@ -32,7 +35,7 @@ exports.userSignUp = async (req, res, next) => {
             password: hash,
             created: moment().format('YYYY-MM-DD '),
         }).save()
-        const token = jwt.sign({
+        const token = await jwt.sign({
                 email: user.email,
                 userId: user._id
             },

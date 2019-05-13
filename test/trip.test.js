@@ -33,8 +33,9 @@ describe("All Operations on Trip", () => {
                 "userId": "5cd525c07a04281d62d2f65b",
                 "pickup_location": "James Town Lighthouse, Cleland Road, Accra",
                 "dropoff_location": "meltwater incubator",
-                "promo_code": "TXWKhi"
+                "promo_code": "EEQpiu"
             })
+            .set('Authorization', 'Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvZHNkZmZkYXNkZUBnbWFpbC5jb20iLCJ1c2VySWQiOiI1Y2Q4YWU2N2JlZGEwMjJiMzdiMTUxMjUiLCJpYXQiOjE1NTc3MDQyOTUsImV4cCI6MTU1NzcxNTA5NX0.Szgu2MKofJzq41BBZ-9niE_KwtTkOBkuXSjbsL5HOp8')
         expect(res).to.have.status(201).to.be.a('object')
         done()
     });

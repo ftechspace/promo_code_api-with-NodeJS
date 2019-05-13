@@ -18,6 +18,7 @@ exports.createTrip = async (req, res, next) => {
 
     const pick_up_result = await Utils.getLocationPointCodinate(pick_up)
     const drop_off_result = await Utils.getLocationPointCodinate(drop_off)
+    
     if (pick_up_result.status == 'OK' && drop_off_result.status == 'OK') {
 
         // trip origin

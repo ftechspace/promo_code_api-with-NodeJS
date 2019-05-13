@@ -61,7 +61,7 @@ exports.validatePromoWithRadius = async (trip_point, promo_code) => {
 
 exports.getLocationPointCodinate = async (location) => {
     try {
-        if(process.env.NODE_ENV == 'test'){
+        if(process.env.NODE_ENV != 'test'){
             return googleapis
         }else{
             const {data} = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.API_KEY}`)
