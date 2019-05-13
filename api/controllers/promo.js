@@ -1,13 +1,15 @@
-const mongoose = require('mongoose');
-const moment = require('moment');
+const mongoose = require('mongoose')
+const moment = require('moment')
 const gpl = require('google-polyline')
+
 // MODELS
-const Promo = require('../models/promo');
+const Promo = require('../models/promo')
 const Event = require('../models/event')
+
 // PARTIALS
 const Utils = require('../partials/utils')
-// CONTROLLERS
 
+// CONTROLLERS
 exports.createPromo = async (req, res, next) => {
     const eventId = req.body.event_id
     const amount = req.body.amount

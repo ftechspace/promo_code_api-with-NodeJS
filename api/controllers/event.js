@@ -9,9 +9,9 @@ const Utils = require('../partials/utils')
 exports.createEvent = async (req, res, next) => {
     const name = req.body.name
     const location = req.body.location
-    const event_radius = req.body.event_radius
-    
+
     const data = await Utils.getLocationPointCodinate(location)
+
     if (data.status == 'OK') {
         const geometryPoints = data.results[0].geometry.location
         const loc_lat = geometryPoints.lat
@@ -28,7 +28,6 @@ exports.createEvent = async (req, res, next) => {
             _id: new mongoose.Types.ObjectId,
             name: name,
             location: eventLocation._id,
-            radius: event_radius,
             created: moment().format('YYYY-MM-DD '),
         }).save()
         

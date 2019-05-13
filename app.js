@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 app.use(cors())
 
@@ -12,19 +13,18 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // connecting to mongoDB
-const mongoose = require('mongoose')
-mongoose.connect(
-    `mongodb+srv://fortunecode:fortunecode@safeboda-e9haz.mongodb.net/test?retryWrites=true`, 
+mongoose.Promise = global.Promise
+mongoose.connect(`mongodb+srv://fortunecode:fortunecode@safeboda-e9haz.mongodb.net/test?retryWrites=true`, 
     { useNewUrlParser: true }
 );
-mongoose.Promise = global.Promise
+
 
 // log Request
 const morgan = require('morgan')
 app.use(morgan('dev'))
 
 
-// // resouces directries
+// // routes resouces directries
 const userRoutes = require('./api/routes/user')
 const eventRoutes = require('./api/routes/event')
 const tripRoutes = require('./api/routes/trip')

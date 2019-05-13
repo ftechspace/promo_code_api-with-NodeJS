@@ -1,9 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-// MIDDLEWARE
-const checkAuth = require('../middleware/check-auth')
-
 // CONTROLLERS PATH
 const promoController = require('../controllers/promo')
 

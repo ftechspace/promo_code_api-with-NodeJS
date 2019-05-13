@@ -8,6 +8,6 @@ const check_auth = require('../middleware/check-auth')
 const TripController = require('../controllers/trip')
 
 // USER API
-router.post('/', TripController.createTrip)
+router.post('/', check_auth, TripController.createTrip)
 
 module.exports = router

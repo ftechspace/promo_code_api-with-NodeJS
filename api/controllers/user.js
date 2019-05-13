@@ -33,26 +33,24 @@ exports.userSignUp = async (req, res, next) => {
             created: moment().format('YYYY-MM-DD '),
         }).save()
         const token = jwt.sign({
+                email: user.email,
+                userId: user._id
+            },
+            process.env.JWT_KEY, {
+                expiresIn: "3h"
+            })
+        if (user && token) {
+            return res.status(201).json({
+                profile: {
+                    id: user._id,
                     email: user.email,
-                    userId: user._id
-                },
-                process.env.JWT_KEY, {
-                    expiresIn: "3h"
-                })
-            .then(result => {
-                res.status(201).json({
-                    profile: {
-                        id: result._id,
-                        email: result.email,
-                        token: token,
-                        created: result.created
-                    }
-                })
+                    token: token,
+                    created: user.created
+                }
             })
-            .catch(err => {
-                res.status(404).json({
-                    error: err
-                })
-            })
+        }
+        return res.status(404).json({
+            error: err
+        })
     })
 }

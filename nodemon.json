@@ -1,7 +1,7 @@
 {
     "env": {
         "MONGO_ATLAS_PW": "fortunecode",
-        "API_KEY": "aAIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYwW",
+        "API_KEY": "AIzaSyBp2ub9miDJkwHwAMA2lMpXvcGeT_44QYw",
         "JWT_KEY": "SECRET"
     }
 }
