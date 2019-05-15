@@ -56,12 +56,11 @@ exports.validatePromoWithRadius = async (trip_point, promo_code) => {
     const _promo = await PromoController.getOnePromo(promo_code)
     const distance = this.getDistance(trip_point, _promo.event.location)
     return {distance,_promo}
-
 }
 
 exports.getLocationPointCodinate = async (location) => {
     try {
-        if(process.env.NODE_ENV != 'test'){
+        if(process.env.NODE_ENV == 'test'){
             return googleapis
         }else{
             const {data} = await axios.post(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.API_KEY}`)

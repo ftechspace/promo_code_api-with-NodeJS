@@ -47,6 +47,7 @@ exports.createTrip = async (req, res, next) => {
 
         // trip distance and cost
         const trip_distance = Utils.getDistance(tripPickUpLocation, tripDropOffLocation)
+        console.log('trip distance', trip_distance)
         var trip_cost = Utils.getCost(trip_distance)
         console.log(`>>>>>>>> Main cost GHS ${trip_cost} >>>>>>>>>`)
         // check to apply promo
