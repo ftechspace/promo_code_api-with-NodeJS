@@ -27,7 +27,7 @@
     "express": "^4.16.4",
     "google-polyline": "^1.0.3",
     "jest": "^24.8.0",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mocha": "^6.1.4",
     "moment": "^2.22.2",
     "mongoose": "^5.3.11",
